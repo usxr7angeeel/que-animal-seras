@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>¿Qué animal eres?</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #74ebd5, #acb6e5);
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    h1 {
+      color: #333;
+    }
+    .question {
+      margin: 20px 0;
+    }
+    button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
+      width: 80%;
+      border: none;
+      border-radius: 10px;
+      background: #6c63ff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #574fd6;
+    }
+    #result {
+      font-size: 1.5em;
+      margin-top: 20px;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🐾 ¿Qué animal eres?</h1>
+  <div id="quiz"></div>
+  <div id="result"></div>
+</div>
+
+<script>
+const questions = [
+  {
+    question: "¿Qué te gusta hacer en tu tiempo libre?",
+    answers: [
+      { text: "Dormir", type: "gato" },
+      { text: "Explorar", type: "perro" },
+      { text: "Leer", type: "búho" }
+    ]
+  },
+  {
+    question: "¿Cómo te describen tus amigos?",
+    answers: [
+      { text: "Leal", type: "perro" },
+      { text: "Independiente", type: "gato" },
+      { text: "Sabio", type: "búho" }
+    ]
+  },
+  {
+    question: "¿Cuál es tu comida favorita?",
+    answers: [
+      { text: "Carne", type: "gato" },
+      { text: "De todo", type: "perro" },
+      { text: "Algo ligero", type: "búho" }
+    ]
+  },
+  {
+    question: "¿Prefieres?",
+    answers: [
+      { text: "Noche", type: "búho" },
+      { text: "Día", type: "perro" },
+      { text: "Ambos", type: "gato" }
+    ]
+  },
+  {
+    question: "¿Cómo reaccionas ante problemas?",
+    answers: [
+      { text: "Pienso mucho", type: "búho" },
+      { text: "Actúo rápido", type: "perro" },
+      { text: "Evito el problema", type: "gato" }
+    ]
+  }
+];
+
+let currentQuestion = 0;
+let scores = { gato: 0, perro: 0, "búho": 0 };
+
+function showQuestion() {
+  const quiz = document.getElementById("quiz");
+  quiz.innerHTML = "";
+
+  const q = questions[currentQuestion];
+
+  const questionEl = document.createElement("div");
+  questionEl.classList.add("question");
+  questionEl.innerHTML = `<h3>${q.question}</h3>`;
+
+  quiz.appendChild(questionEl);
+
+  q.answers.forEach(answer => {
+    const btn = document.createElement("button");
+    btn.innerText = answer.text;
+    btn.onclick = () => selectAnswer(answer.type);
+    quiz.appendChild(btn);
+  });
+}
+
+function selectAnswer(type) {
+  scores[type]++;
+  currentQuestion++;
+
+  if (currentQuestion < questions.length) {
+    showQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult() {
+  const result = document.getElementById("result");
+  const quiz = document.getElementById("quiz");
+  quiz.innerHTML = "";
+
+  let maxType = Object.keys(scores).reduce((a, b) =>
+    scores[a] > scores[b] ? a : b
+  );
+
+  let message = "";
+
+  if (maxType === "gato") {
+    message = "🐱 Eres un GATO: independiente y tranquilo.";
+  } else if (maxType === "perro") {
+    message = "🐶 Eres un PERRO: leal y energético.";
+  } else {
+    message = "🦉 Eres un BÚHO: sabio y observador.";
+  }
+
+  result.innerText = message;
+}
+
+showQuestion();
+</script>
+
+</body>
+</html>
